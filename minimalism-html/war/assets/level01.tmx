@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="64" height="48" tilewidth="32" tileheight="32" backgroundcolor="#ffffff">
+ <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32">
+  <image source="tiles.png" width="512" height="512"/>
+  <tile id="1">
+   <properties>
+    <property name="breakable" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="257" name="pickups" tilewidth="32" tileheight="32">
+  <image source="coin.png" width="32" height="32"/>
+ </tileset>
+ <layer name="Collision" width="64" height="48">
+  <data encoding="base64" compression="zlib">
+   eJztmbEOgCAMBcH//2hj4sAAKgi08O6SDibE9my7YAwhRPFQBX/88dcFf/zx1wV//PHXBX/88dcFf7/+M+65vPvPyIG/T0bWtcL9r0L/n/rg2T+t+bijZZ6sZ89D/63yeth/+m9LD/8/71jJf8SsrLb/u/in+a33v/affO35L/nfzozCW/9n1zMzX8us7Y76N1B2v8BfK0r+VljPHv74p5G7yxm9f6Waej/n6rDuvzX4468eJ2FOAZc=
+  </data>
+ </layer>
+ <layer name="Pickups" width="64" height="48">
+  <data encoding="base64" compression="zlib">
+   eJzt1EsOhCAQBUC9/6UnLtwYP/Qw0MJUJURNjN0PkGUBAAAAAGAm65rdAaOzh753N3c95jV77bLztxDpe8b8ESPn3/qr7TE7Y039Pf/VaF2/t2Ouf81fOkq/+VbR9R4x/9P52zr/m0Xzyj9XfvJF95a9CGX8F8CT/Zz41fV4f1Xv7L3aZ859AKO1ARs=
+  </data>
+ </layer>
+</map>

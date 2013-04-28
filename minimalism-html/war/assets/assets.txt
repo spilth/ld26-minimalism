@@ -1,0 +1,15 @@
+d:war/
+a:break.wav
+i:coin.png
+b:coin.pxm
+a:coin.wav
+d:data
+i:data/libgdx.png
+t:font.fnt
+i:font.png
+a:jump.wav
+b:level01.tmx
+b:level02.tmx
+a:minimalism.ogg
+i:player.png
+i:tiles.png

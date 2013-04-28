@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="32" height="24" tilewidth="32" tileheight="32" backgroundcolor="#000000">
+ <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32">
+  <image source="tiles.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="257" name="pickups" tilewidth="32" tileheight="32">
+  <image source="coin.png" width="32" height="32"/>
+ </tileset>
+ <layer name="Collision" width="32" height="24">
+  <data encoding="base64" compression="zlib">
+   eJztzcEJADAMAzFn/6U7RB5OQYZ7Gk2SKdcan8/n8/n8//7b8fkX/GYPnHoAbw==
+  </data>
+ </layer>
+ <layer name="Pickups" width="32" height="24">
+  <data encoding="base64" compression="zlib">
+   eJztyDENAAAMA6DWv+mpaLIDThIAAKDd/hcHEhwACQ==
+  </data>
+ </layer>
+ <objectgroup name="Objects" width="32" height="24"/>
+</map>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project minimalism-desktop with Jar-in-Jar Loader">
+    <target name="create_run_jar">
+        <jar destfile="/Users/brian/Dropbox/Projects/minimalism/minimalism-desktop/target/superminimalistics.jar">
+            <manifest>
+                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="org.spilth.minimalism.Main"/>
+                <attribute name="Class-Path" value="."/>
+                <attribute name="Rsrc-Class-Path" value="./ gdx.jar gdx-backend-lwjgl.jar gdx-backend-lwjgl-natives.jar gdx-natives.jar"/>
+            </manifest>
+            <zipfileset src="jar-in-jar-loader.zip"/>
+            <fileset dir="/Users/brian/Dropbox/Projects/minimalism/minimalism-android/assets"/>
+            <fileset dir="/Users/brian/Dropbox/Projects/minimalism/minimalism-desktop/bin"/>
+            <fileset dir="/Users/brian/Dropbox/Projects/minimalism/minimalism/bin"/>
+            <zipfileset dir="/Users/brian/Dropbox/Projects/minimalism/minimalism/libs" includes="gdx.jar"/>
+            <zipfileset dir="/Users/brian/Dropbox/Projects/minimalism/minimalism-desktop/libs" includes="gdx-backend-lwjgl.jar"/>
+            <zipfileset dir="/Users/brian/Dropbox/Projects/minimalism/minimalism-desktop/libs" includes="gdx-backend-lwjgl-natives.jar"/>
+            <zipfileset dir="/Users/brian/Dropbox/Projects/minimalism/minimalism-desktop/libs" includes="gdx-natives.jar"/>
+        </jar>
+    </target>
+</project>
