@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -29,11 +30,12 @@ public class Minimalism implements ApplicationListener {
 	private float deltaTime;
 	private Player player;
 	private int tileSize = 32;
-	private float maxColor = 1.0f;
 	private int maxScore = 1000000;
 	private int score;
 	private int itemCount = 0;
 	private int pickupPoints = maxScore / 10;
+	
+	private FPSLogger fpsLogger = new FPSLogger();
 	
 	private BitmapFont font;
 
@@ -75,6 +77,8 @@ public class Minimalism implements ApplicationListener {
 		batch = new SpriteBatch();
 
 		font = new BitmapFont(Gdx.files.internal("font.fnt"),Gdx.files.internal("font.png"),false);
+		font.setColor(0, 0, 0, 1);
+
 		itemSound = Gdx.audio.newSound(Gdx.files.internal("item.wav"));
 		breakSound = Gdx.audio.newSound(Gdx.files.internal("break.wav"));
 		jumpSound = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
@@ -120,7 +124,7 @@ public class Minimalism implements ApplicationListener {
 
 	@Override
 	public void render() {		
-		Gdx.gl.glClearColor(maxColor, maxColor, maxColor, 1);
+		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		deltaTime = Gdx.graphics.getDeltaTime();
@@ -210,13 +214,7 @@ public class Minimalism implements ApplicationListener {
 		getTiles(pickupIndex, startX, startY, endX, endY, tiles);
 		for (Rectangle tile : tiles) {
 			if (playerRect.overlaps(tile)) {
-				itemSound.play(1.0f, 1.0f + coinPitch, 0);
-				TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(pickupIndex);
-				layer.setCell((int) tile.x / tileSize, (int) tile.y / tileSize, null);
-				score -= pickupPoints;
-				coinPitch -= 0.01f;
-				maxColor -= 0.01f;
-				itemCount += 1;
+				pickupItem(tile);
 			}
 		}
 		
@@ -287,12 +285,26 @@ public class Minimalism implements ApplicationListener {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(playerImage, player.position.x, player.position.y, player.width, player.height);
-		font.draw(batch, "Score: " + Integer.toString(score), 768 , 32);
-		font.draw(batch, "Items: " + Integer.toString(itemCount), 256 , 32);
-
 		batch.end();
 
 		renderer.render(foregroundLayers);
+
+		batch.setProjectionMatrix(camera.projection);
+		batch.begin();
+		font.draw(batch, "Score: " + Integer.toString(score), -384 , -336);
+		font.draw(batch, "Items: " + Integer.toString(itemCount), 256 , -336);
+		batch.end();
+		
+		fpsLogger.log();
+	}
+
+	private void pickupItem(Rectangle tile) {
+		itemSound.play(1.0f, 1.0f + coinPitch, 0);
+		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(pickupIndex);
+		layer.setCell((int) tile.x / tileSize, (int) tile.y / tileSize, null);
+		score -= pickupPoints;
+		coinPitch -= 0.01f;
+		itemCount += 1;
 	}
 
 	private void getTiles(int layerIndex, int startX, int startY, int endX, int endY, Array<Rectangle> tiles) {
