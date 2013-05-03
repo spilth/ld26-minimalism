@@ -21,12 +21,12 @@
  </layer>
  <layer name="Collision" width="64" height="48">
   <data encoding="base64" compression="zlib">
-   eJztmbEOgCAMBcH//2hj4sAAKgi08O6SDibE9my7YAwhRPFQBX/88dcFf/zx1wV//PHXBX/88dcFf7/+M+65vPvPyIG/T0bWtcL9r0L/n/rg2T+t+bijZZ6sZ89D/63yeth/+m9LD/8/71jJf8SsrLb/u/in+a33v/affO35L/nfzozCW/9n1zMzX8us7Y76N1B2v8BfK0r+VljPHv74p5G7yxm9f6Waej/n6rDuvzX4468eJ2FOAZc=
+   eJztmFEOgCAMQ8H7H9qY+EEIKAqshbXJPjAqeyszQgwhROfhVeIXf43fQ0++8e8u8Yu/hT+/p3fMIvn//v3Pr40coyX/Mf3PUlv5j+1/dI3lP0f/o2qt/R9XWIvZf4v6svNbzCF+Ts3MC/3daZEH/598YOZPcz7u+LOe0GuPwX/UvAz9L/+xGsHf846V+GesldX6fxf+dH50/3/dC47cO7Y8O/s/FKmc3zofy/mYzh1Y5L0Gntkvid9X1PhRQq898Ys/jdJZzuz+q+U0elzKA+0/WuIXv/c4AdPvAgQ=
   </data>
  </layer>
  <layer name="Pickups" width="64" height="48">
   <data encoding="base64" compression="zlib">
-   eJzt2EEOhDAIQFGr9v5XdmGMhigRMcXif0kXzkzSUhDrDAMAAAAAAAAAIJOpRK8AvaOGnhuVvWuxr9r8LWjz107ryrLujPFbRNe/Rynr8Ii+/2bH/LXseyDH3dqNjt9C5vsqdktd9Bi/lvNM8VdjvnvMv7ZOrd61e/+NvvgF1nw/6X9fZs13tvwjnqw92ZO9vwf+ynP2B/AP2/Nze1fxXh8/O3PsS/IcLXuW/I9Ifp/hHN7CArJ8AYM=
+   eJztmNsOhDAIRO2u/f9f3vjQaIhgKZtWYE5ijLfUYShFtw0AAABHKfJx73MgBk++juZLJJpmuo8Ipy2yZnCSyecM87kXbZ33GLMnvzPUeet6H7Ef4HzX7j3S6y+nNUIMAAB++aL2ACPIoXE+QuxmxFUafwbS+NVpXmneO6J+Davz38LRt1t799XzbzeMX8sZA7r15u5q/Rqo35x2TV541C95Hkl/Vfrt0X/pPaV8l+b+P+riG9D6PVL/3ozW72j+g/XQ3KM12Xo/AFmx9P4AgBy09bN9q1iPr+fuuNYl2kfTmkX/EdHrEfrwGfwAWHUB2Q==
   </data>
  </layer>
  <layer name="Foreground" width="64" height="48" opacity="0.48">
