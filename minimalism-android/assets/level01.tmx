@@ -19,6 +19,11 @@
    eJzt2MENwyAMBdDPCE27gLtBs0H2X6q5cEGBKC7UNvmHJytSkGzZJIgNwEZEREREREREZOyRgCWNX+OJ7N6N2GuNV5/d2oi91tD9COLth5687Ifch4j9KHPW1BD5+1TmHKkGTa9mEqlX3gnuMUu1OiPOkqZnEeuMUEvuRRmvrLGuoUcvrpwFIp8bLAnmmRsNzg1Zg4McSoL2vdkssVb/2b3ZLNF6zsgnge3+O8plxHMtD0/77+xe6Zdnfgf0ngl4pXHvWxL4+D//O+b6rf/LPA/Y+QKV8ORC
   </data>
  </layer>
+ <layer name="Triggers" width="64" height="48">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIAzASJODfKyI4dtAqaBUAAADwRacDYZMOAAAAAAAAAMDBAtxuABc=
+  </data>
+ </layer>
  <layer name="Collision" width="64" height="48">
   <data encoding="base64" compression="zlib">
    eJztmFEOgCAMQ8H7H9qY+EEIKAqshbXJPjAqeyszQgwhROfhVeIXf43fQ0++8e8u8Yu/hT+/p3fMIvn//v3Pr40coyX/Mf3PUlv5j+1/dI3lP0f/o2qt/R9XWIvZf4v6svNbzCF+Ts3MC/3daZEH/598YOZPcz7u+LOe0GuPwX/UvAz9L/+xGsHf846V+GesldX6fxf+dH50/3/dC47cO7Y8O/s/FKmc3zofy/mYzh1Y5L0Gntkvid9X1PhRQq898Ys/jdJZzuz+q+U0elzKA+0/WuIXv/c4AdPvAgQ=

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="32" height="24" tilewidth="32" tileheight="32" backgroundcolor="#ffcccc">
  <properties>
-  <property name="message" value="Avoid picking things up!"/>
+  <property name="message" value="Hooray! You won!"/>
  </properties>
  <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32">
   <image source="tiles.png" width="512" height="512"/>
@@ -24,7 +24,7 @@
  </layer>
  <layer name="Triggers" width="32" height="24">
   <data encoding="base64" compression="zlib">
-   eJztzUEJAAAIBLADI9i/q18bCLIVWAIAAL/V8d/H/zYZiAAX
+   eJztwQEBAAAAgiD/r25IQAEAAC8GDAAAAQ==
   </data>
  </layer>
  <layer name="Collision" width="32" height="24">
@@ -34,7 +34,7 @@
  </layer>
  <layer name="Pickups" width="32" height="24">
   <data encoding="base64" compression="zlib">
-   eJztzjENAAAIA7DNv2kskHDwtAqaAAAAG+334G4ADYcAAw==
+   eJztwQEBAAAAgiD/r25IQAEAAC8GDAAAAQ==
   </data>
  </layer>
  <layer name="Foreground" width="32" height="24" opacity="0.48">

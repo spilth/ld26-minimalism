@@ -22,6 +22,10 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 
 public class Minimalism implements ApplicationListener {
+	private String[] levels = {"level02.tmx", "level03.tmx", "level04.tmx", "level01.tmx", "ending.tmx"};
+	private int levelNumber = 0;
+	private String message = null;
+	
 	private OrthographicCamera camera;
 	private OrthogonalTiledMapRenderer renderer;
 	private SpriteBatch batch;
@@ -34,6 +38,8 @@ public class Minimalism implements ApplicationListener {
 	private int score;
 	private int itemCount = 0;
 	private int pickupPoints = maxScore / 10;
+	
+	private boolean complete = true;
 	
 	private FPSLogger fpsLogger = new FPSLogger();
 	
@@ -62,11 +68,14 @@ public class Minimalism implements ApplicationListener {
 	private Sound jumpSound;
 	private Music music;
 	
-	private int[] backgroundLayers = { 0,1 };
-	private int[] foregroundLayers = { 2,3 };
+	private int[] backgroundLayers = { 0,1,2 };
+	private int[] foregroundLayers = { 3,4 };
 	
-	private int pickupIndex = 2;
-	private int collisionIndex = 1;
+	private int pickupIndex = 3;
+	private int collisionIndex = 2;
+	private int triggerIndex = 1;
+	private Sound completeSound;
+	private String levelName = "level02.tmx";
 	
 	@Override
 	public void create() {
@@ -82,44 +91,53 @@ public class Minimalism implements ApplicationListener {
 		itemSound = Gdx.audio.newSound(Gdx.files.internal("item.wav"));
 		breakSound = Gdx.audio.newSound(Gdx.files.internal("break.wav"));
 		jumpSound = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
+		completeSound = Gdx.audio.newSound(Gdx.files.internal("complete.wav"));
 		
 		playerImage = new Texture(Gdx.files.internal("player.png"));
 
 		music = Gdx.audio.newMusic(Gdx.files.internal("minimalism.ogg"));
 		music.setLooping(true);
+		music.play();
 		
 		resetLevel();
-	}
-
-	private void resetLevel() {
-		score = maxScore;
-		player = new Player();
-		player.position.x = 32;
-		player.position.y = 32;
-		itemCount = 0;
-
-		map = new TmxMapLoader().load("level01.tmx");
-		
-		TiledMapTileLayer mainLayer = (TiledMapTileLayer) map.getLayers().get(0);
-		tileSize = (int) mainLayer.getTileWidth();
-		levelWidth = mainLayer.getWidth() * tileSize;	
-		levelHeight = mainLayer.getHeight() * tileSize;
-		
-		// Set up min/max position of Camera
-		minCameraX = viewportWidth / 2;
-		minCameraY = viewportHeight / 2;
-		maxCameraX = levelWidth - minCameraX;
-		maxCameraY = levelHeight - minCameraY;
-		
-		renderer = new OrthogonalTiledMapRenderer(map);
-		camera.setToOrtho(false, viewportWidth, viewportHeight);
-
-	    music.play();
 	}
 
 	@Override
 	public void dispose() {
 		batch.dispose();
+	}
+
+	private void getTiles(int layerIndex, int startX, int startY, int endX, int endY, Array<Rectangle> tiles) {
+		startX /= tileSize;
+		startY /= tileSize;
+		endX /= tileSize;
+		endY /= tileSize;
+		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerIndex);
+		rectPool.freeAll(tiles);
+		tiles.clear();
+		for (int y = startY; y <= endY; y++) {
+			for (int x = startX; x <= endX; x++) {
+				Cell cell = layer.getCell(x, y);
+				if (cell != null) {
+					Rectangle rect = rectPool.obtain();
+					rect.set(x * tileSize, y * tileSize, tileSize, tileSize);
+					tiles.add(rect);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void pause() {
+	}
+
+	private void pickupItem(Rectangle tile) {
+		itemSound.play(1.0f, 1.0f + coinPitch, 0);
+		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(pickupIndex);
+		layer.setCell((int) tile.x / tileSize, (int) tile.y / tileSize, null);
+		score -= pickupPoints;
+		coinPitch -= 0.01f;
+		itemCount += 1;
 	}
 
 	@Override
@@ -130,52 +148,58 @@ public class Minimalism implements ApplicationListener {
 		deltaTime = Gdx.graphics.getDeltaTime();
 		
 		// PROCESS INPUT
-		
 		if ((Gdx.input.isKeyPressed(Keys.R))) {
 			resetLevel();
 		}
 		
-		if ((Gdx.input.isKeyPressed(Keys.SPACE)) && player.grounded) {
-			player.velocity.y += player.JUMP_VELOCITY;
-			player.grounded = false;
-			jumpSound.play();
-		}
 		
-		if (player.grounded) {
-			// If they're on the ground...
-			if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-				player.velocity.x = -player.MAX_VELOCITY;
+		if (!complete) {
+			if ((Gdx.input.isKeyPressed(Keys.SPACE)) && player.grounded) {
+				player.velocity.y += player.JUMP_VELOCITY;
+				player.grounded = false;
+				jumpSound.play();
 			}
-
-			if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-				player.velocity.x = player.MAX_VELOCITY;
+			
+			if (player.grounded) {
+				// If they're on the ground...
+				if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+					player.velocity.x = -player.MAX_VELOCITY;
+				}
+	
+				if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+					player.velocity.x = player.MAX_VELOCITY;
+				}
+			} else {
+				// If they're in the air control is more limited
+				if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+					if (player.velocity.x >= 0)
+						player.velocity.x = -player.MAX_VELOCITY / 4;
+				}
+	
+				if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+					if (player.velocity.x <= 0)
+						player.velocity.x = player.MAX_VELOCITY / 4;
+				}
 			}
+			
+			player.velocity.add(0, -9.0f);
+			
+			// clamp the velocity to the maximum, x-axis only
+			if (Math.abs(player.velocity.x) > player.MAX_VELOCITY) {
+				player.velocity.x = Math.signum(player.velocity.x) * player.MAX_VELOCITY;
+			}
+	
+			// clamp the velocity to 0 if it's < 1
+			if (Math.abs(player.velocity.x) < 1) {
+				player.velocity.x = 0;
+			}
+			
+			player.velocity.scl(deltaTime);
 		} else {
-			// If they're in the air control is more limited
-			if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-				if (player.velocity.x >= 0)
-					player.velocity.x = -player.MAX_VELOCITY / 4;
-			}
-
-			if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-				if (player.velocity.x <= 0)
-					player.velocity.x = player.MAX_VELOCITY / 4;
+			if (Gdx.input.isKeyPressed(Keys.N)) {
+				loadNextLevel();
 			}
 		}
-		
-		player.velocity.add(0, -9.0f);
-		
-		// clamp the velocity to the maximum, x-axis only
-		if (Math.abs(player.velocity.x) > player.MAX_VELOCITY) {
-			player.velocity.x = Math.signum(player.velocity.x) * player.MAX_VELOCITY;
-		}
-
-		// clamp the velocity to 0 if it's < 1
-		if (Math.abs(player.velocity.x) < 1) {
-			player.velocity.x = 0;
-		}
-		
-		player.velocity.scl(deltaTime);
 		
 		Rectangle playerRect = rectPool.obtain();
 		playerRect.set(player.position.x, player.position.y, player.width, player.height);
@@ -215,6 +239,15 @@ public class Minimalism implements ApplicationListener {
 		for (Rectangle tile : tiles) {
 			if (playerRect.overlaps(tile)) {
 				pickupItem(tile);
+			}
+		}
+		
+		getTiles(triggerIndex, startX, startY, endX, endY, tiles);
+		for (Rectangle tile : tiles) {
+			if (playerRect.overlaps(tile)) {
+				complete = true;
+				//music.stop();
+				completeSound.play();
 			}
 		}
 		
@@ -293,46 +326,57 @@ public class Minimalism implements ApplicationListener {
 		batch.begin();
 		font.draw(batch, "Score: " + Integer.toString(score), -384 , -336);
 		font.draw(batch, "Items: " + Integer.toString(itemCount), 256 , -336);
+		if (complete) {
+			font.draw(batch, "LEVEL COMPLETED!", -128 , 0);
+			font.draw(batch, "PRESS 'N' FOR NEXT LEVEL", -128 , -32);
+		} else {
+			if (message != null) {
+				font.draw(batch, message, -384 , 336);
+			}
+		}
 		batch.end();
+		
 		
 		fpsLogger.log();
 	}
-
-	private void pickupItem(Rectangle tile) {
-		itemSound.play(1.0f, 1.0f + coinPitch, 0);
-		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(pickupIndex);
-		layer.setCell((int) tile.x / tileSize, (int) tile.y / tileSize, null);
-		score -= pickupPoints;
-		coinPitch -= 0.01f;
-		itemCount += 1;
-	}
-
-	private void getTiles(int layerIndex, int startX, int startY, int endX, int endY, Array<Rectangle> tiles) {
-		startX /= tileSize;
-		startY /= tileSize;
-		endX /= tileSize;
-		endY /= tileSize;
-		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerIndex);
-		rectPool.freeAll(tiles);
-		tiles.clear();
-		for (int y = startY; y <= endY; y++) {
-			for (int x = startX; x <= endX; x++) {
-				Cell cell = layer.getCell(x, y);
-				if (cell != null) {
-					Rectangle rect = rectPool.obtain();
-					rect.set(x * tileSize, y * tileSize, tileSize, tileSize);
-					tiles.add(rect);
-				}
-			}
-		}
-	}
 	
+	private void loadNextLevel() {
+		levelNumber++;
+		resetLevel();
+	}
+
+	private void resetLevel() {
+		complete = false;
+		score = maxScore;
+		player = new Player();
+		player.position.x = 32;
+		player.position.y = 32;
+		itemCount = 0;
+
+		levelName = levels[levelNumber];
+		map = new TmxMapLoader().load(levelName);
+		
+		TiledMapTileLayer mainLayer = (TiledMapTileLayer) map.getLayers().get(0);
+		tileSize = (int) mainLayer.getTileWidth();
+		levelWidth = mainLayer.getWidth() * tileSize;	
+		levelHeight = mainLayer.getHeight() * tileSize;
+		
+		message = map.getProperties().get("message", null, String.class);
+		
+		// Set up min/max position of Camera
+		minCameraX = viewportWidth / 2;
+		minCameraY = viewportHeight / 2;
+		maxCameraX = levelWidth - minCameraX;
+		maxCameraY = levelHeight - minCameraY;
+		
+		renderer = new OrthogonalTiledMapRenderer(map);
+		camera.setToOrtho(false, viewportWidth, viewportHeight);
+
+	    //music.play();
+	}
+
 	@Override
 	public void resize(int width, int height) {
-	}
-
-	@Override
-	public void pause() {
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="32" height="24" tilewidth="32" tileheight="32" backgroundcolor="#ffcccc">
  <properties>
-  <property name="message" value="Avoid picking things up!"/>
+  <property name="message" value="Some blocks can be broken."/>
  </properties>
  <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32">
   <image source="tiles.png" width="512" height="512"/>
@@ -29,12 +29,12 @@
  </layer>
  <layer name="Collision" width="32" height="24">
   <data encoding="base64" compression="zlib">
-   eJztzbENAAAMg7D0/6d7BouRmH3bLr6Kz+fz+Xw+n88v/PIHlPYAbQ==
+   eJxjZGBgYBxgTAmgRP+o/aP2j9o/av+o/aP2j9o/av9A2Q/DTFBMStsIW3uKWHMI2UFp2BAyZ9T+gccASpkAmg==
   </data>
  </layer>
  <layer name="Pickups" width="32" height="24">
   <data encoding="base64" compression="zlib">
-   eJztzjENAAAIA7DNv2kskHDwtAqaAAAAG+334G4ADYcAAw==
+   eJztwQEBAAAAgiD/r25IQAEAAC8GDAAAAQ==
   </data>
  </layer>
  <layer name="Foreground" width="32" height="24" opacity="0.48">
